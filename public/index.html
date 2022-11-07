@@ -2,51 +2,40 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Web Assignment 0</title>
-    <meta name="description" content="First web assignment">
+    <title>NutriKit</title>
+    <meta name="description" content="NutriKit V1">
     <meta name="author" content="Reid Taylor">
-    <script>
-        function selectContent(value) {
-            console.log(value);
-            document.getElementById("content-area").innerHTML = value;
-        }
-        function selectColor(color) {
-            console.log(color);
-            document.getElementById("content-area").style.color = color;
-        }
-    </script>
+    <link href="styles.css" rel="stylesheet">
 </head>
-<body style="display: flex; flex-direction: column; align-items: center;">
+<body>
     <div class="title-bar">
-        <h1 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-weight: bold;font-size: 35px; text-align: center;">
-            SWEN-344 Web Assignment 0
+        <h1>
+            NutriKit Food Planner
         </h1>
-        <h2 style="font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; text-align: center;">
-            Section 02
-        </h2>
+        <h3>
+            NutriKit allows you to select your groceries and track your nutritional progress (good or bad)
+        </h3>
     </div>
-    <div class="controls" style="display: flex; flex-direction: column; align-items: center;">
-        <select class="content-selector" onchange="selectContent(this.value)">
-            <option value="" selected></option>
-            <option value="Protein">Protein</option>
-            <option value="Carbs">Carbs</option>
-            <option value="Fruits">Fruits</option>
-            <option value="Vegetables">Vegetables</option>
-            <option value="Sweets">Sweets</option>
-        </select>
-        <div class="color-selector">
-            <input type="radio" id="black" name="color" value="black" onclick="selectColor(this.value)">
-            <label for="black">Black</label><br>
-            <input type="radio" id="red" name="color" value="red" onclick="selectColor(this.value)">
-            <label for="red">Red</label><br>
-            <input type="radio" id="green" name="color" value="green" onclick="selectColor(this.value)">
-            <label for="green">Green</label><br>
-            <input type="radio" id="blue" name="color" value="blue" onclick="selectColor(this.value)">
-            <label for="blue">Blue</label><br>
-            <input type="radio" id="purple" name="color" value="purple" onclick="selectColor(this.value)">
-            <label for="purple">Purple</label><br>
+    <div class="controls">
+        <div class="control-section">
+            <h4>
+                Categories
+            </h4>
+            <select class="category-selector" id="categories">
+            </select>
         </div>
-        <textarea id="content-area" class="content-area" rows=2 cols=20 style="font-size: 20px; resize: none;">Food Type...</textarea>
+        <div class="control-section">
+            <h4>
+                Menu Items
+            </h4>
+            <select class="food-selector" id="foods" multiple="multiple">
+                <option value="">Select a category</option>
+            </select>
+        </div>
+        <div class="control-section">
+            <span class="titlebar-space"></span>
+            <button>>></button>
+        </div>
     </div>
 </body>
 </html>
