@@ -6,8 +6,9 @@
     <meta name="description" content="NutriKit V1">
     <meta name="author" content="Reid Taylor">
     <link href="styles.css" rel="stylesheet">
+    <script src="main.js"></script>
 </head>
-<body>
+<body onload="populateCategories()">
     <div class="title-bar">
         <h1>
             NutriKit Food Planner
@@ -17,24 +18,31 @@
         </h3>
     </div>
     <div class="controls">
-        <div class="control-section">
+        <div class="control-section" id="categories">
             <h4>
                 Categories
             </h4>
-            <select class="category-selector" id="categories">
+            <select class="category-list" id="category-list" onchange="selectCategory(this.value)">
             </select>
         </div>
-        <div class="control-section">
+        <div class="control-section" id="menu">
             <h4>
                 Menu Items
             </h4>
-            <select class="food-selector" id="foods" multiple="multiple">
+            <select class="food-list" id="food-list" size=5 multiple="multiple">
                 <option value="">Select a category</option>
             </select>
         </div>
-        <div class="control-section">
-            <span class="titlebar-space"></span>
+        <div class="control-section" id="buttons">
+            <span class="section-title-space"></span>
             <button>>></button>
+        </div>
+        <div class="control-section" id="selected">
+            <h4>
+                Selected Items
+            </h4>
+            <select class="food-selector" id="foods" size=10 multiple="multiple">
+            </select>
         </div>
     </div>
 </body>

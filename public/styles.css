@@ -2,6 +2,7 @@ body {
     display: flex; 
     flex-direction: column; 
     align-items: center; 
+    background-color:cornsilk;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -30,4 +31,12 @@ select {
     flex-direction: column; 
     align-items: flex-start;
     margin: 10px 20px
+}
+
+.food-list {
+    min-width: 10rem;
+}
+
+.section-title-space {
+    height: 45pt;
 }
