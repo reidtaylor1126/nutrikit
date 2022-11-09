@@ -29,20 +29,22 @@
             <h4>
                 Menu Items
             </h4>
-            <select class="food-list" id="food-list" size=5 multiple="multiple">
+            <select class="food-list" id="food-list" size=5 onchange="showAddButton()" onclick="showAddButton()">
                 <option value="">Select a category</option>
             </select>
         </div>
         <div class="control-section" id="buttons">
             <span class="section-title-space"></span>
-            <button>>></button>
+            <button id="addButton" onclick="addFood()">>></button>
+            <button id="removeButton" onclick="removeFood()" style="display: none;"><<</button>
         </div>
         <div class="control-section" id="selected">
             <h4>
                 Selected Items
             </h4>
-            <select class="food-selector" id="foods" size=10 multiple="multiple">
+            <select class="food-selector" id="selected-list" size=10 onchange="showRemoveButton()" onclick="showRemoveButton()">
             </select>
+            <p id="calories">Total Calories: 0</p>
         </div>
     </div>
 </body>
