@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import Categories from './components/categories.js'
+import Page from './components/page.js'
 import reportWebVitals from './reportWebVitals';
 
 const categories = ["Proteins", "Fruits", "Vegetables", "Dairy", "Grains"]
@@ -10,7 +10,7 @@ const categories = ["Proteins", "Fruits", "Vegetables", "Dairy", "Grains"]
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Categories categories={categories}/>
+    <Page />
   </React.StrictMode>
 );
 
