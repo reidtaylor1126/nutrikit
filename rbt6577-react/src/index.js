@@ -2,10 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import Page from './components/page.js'
+import Page from './components/page'
 import reportWebVitals from './reportWebVitals';
-
-const categories = ["Proteins", "Fruits", "Vegetables", "Dairy", "Grains"]
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

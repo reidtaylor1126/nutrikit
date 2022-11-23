@@ -1,17 +1,15 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import { Button } from 'reactstrap'
 
-class FoodButton extends React.Component {
-    render() {
-        return(
-            <button 
-                onClick={() => this.props.onClick()} 
-                style={{display: this.props.visible ? 'block' : 'none'}}
-            >
-                {this.props.label}
-            </button>
-        )
-    }
+function FoodButton(props) {
+    return(
+        <Button 
+            color='dark'
+            onClick={() => props.onClick()} 
+            style={{display: props.visible ? 'block' : 'none'}}
+        >
+            {props.label}
+        </Button>
+    )
 }
-
 export default FoodButton;

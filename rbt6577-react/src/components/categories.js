@@ -1,19 +1,33 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { Col, Container, Input } from 'reactstrap';
 
 class Categories extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            value: props.default || ""
+        }
+    }
     render() {
         return(
-            <div className={this.props.className}>
+            <Col 
+                className={this.props.className}
+                sm={2}
+            >
                 <h3>Categories</h3>
-                <select className="food-list" onChange={(e) => {this.props.onSelect(e.target.value);}} value={this.props.category}>
+                <Input 
+                    type="select" 
+                    name="food-list" 
+                    value={this.state.value}
+                    onChange={(e) => {this.setState({value: e.target.value}); this.props.onSelect(e.target.value);}}>
                     {this.props.categories.map((category, index) => {
                         return(
                             <option key={index} value={category}>{category}</option>
                         )
                     })}
-                </select>
-            </div>
+                </Input>
+            </Col>
         )
     }
 }

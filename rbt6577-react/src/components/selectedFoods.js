@@ -1,11 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { Col } from 'reactstrap';
 import FoodList from './foodList';
 
 class SelectedFoods extends React.Component {
     render() {
         return(
-            <div className={this.props.className}>
+            <Col 
+                className={this.props.className}
+                sm={5}
+            >
                 <FoodList 
                     title={this.props.title}
                     onSelect={this.props.onSelect}
@@ -15,7 +19,7 @@ class SelectedFoods extends React.Component {
                 <p>
                     Total Calories: {this.props.calories}
                 </p>
-            </div>
+            </Col>
         )
     }
 }

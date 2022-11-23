@@ -13,3 +13,5 @@ pages:
   artifacts:
     paths:
     - public
+variables:
+  PROJECT_NAME: client-3

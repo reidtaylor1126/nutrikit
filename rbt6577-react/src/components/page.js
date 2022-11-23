@@ -4,9 +4,10 @@ import Categories from './categories.js';
 import FoodList from './foodList.js';
 import FoodButton from './foodButton.js';
 import SelectedFoods from './selectedFoods.js';
-import './styles.css'
 
-import {categories, menuItems} from '../data.js'
+import {categories, menuItems} from '../data.js';
+import { Container, Row, Col, Button } from 'reactstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class Page extends React.Component {
     constructor(props) {
@@ -38,6 +39,7 @@ class Page extends React.Component {
     }
 
     selectFood = (index, listModeAdd) => {
+        console.log("selected index ", index)
         this.setState({
             selectedFoodIndex: index,
             listModeAdd: listModeAdd
@@ -47,42 +49,49 @@ class Page extends React.Component {
     render() {
 
         return (
-            <div className='controls'>
-                <Categories 
-                    className='control-section'
-                    categories={categories} 
-                    onSelect={this.selectCategory} 
-                    category={this.state.selectedCategory}
-                />
-                <FoodList 
-                    className='control-section'
-                    title={'Menu Items'}
-                    onSelect={this.selectFood}
-                    foods={menuItems[this.state.selectedCategory] || []}
-                    listModeAdd={true}
-                />
-                <div className='control-section'>
-                    <span className="section-title-space"></span>
-                    <FoodButton 
-                        label={'>>'}
-                        onClick={this.addFood}
-                        visible={this.state.listModeAdd}
+            <Container 
+                className='controls'
+            >
+                <Row className="controls">
+                    <Categories 
+                        className='control-section'
+                        categories={categories} 
+                        onSelect={this.selectCategory} 
+                        category={this.state.selectedCategory}
                     />
-                    <FoodButton 
-                        label={'<<'}
-                        onClick={this.removeFood}
-                        visible={!this.state.listModeAdd}
+                    <FoodList 
+                        className='control-section'
+                        title={'Menu Items'}
+                        onSelect={this.selectFood}
+                        foods={menuItems[this.state.selectedCategory] || []}
+                        listModeAdd={true}
                     />
-                </div>
-                <SelectedFoods 
-                    className='control-section'
-                    title={'Selected Foods'}
-                    onSelect={this.selectFood}
-                    foods={this.state.selectedFoods}
-                    listModeAdd={false}
-                    calories={this.state.totalCalories}
-                />
-            </div>
+                    <Col 
+                        className='control-section'
+                        sm={1}
+                    >
+                        <span className="section-title-space"></span>
+                        <FoodButton 
+                            label={'>>'}
+                            onClick={this.addFood}
+                            visible={true}
+                        />
+                        <FoodButton 
+                            label={'<<'}
+                            onClick={this.removeFood}
+                            visible={true}
+                        />
+                    </Col>
+                    <SelectedFoods 
+                        className='control-section'
+                        title={'Selected Foods'}
+                        onSelect={this.selectFood}
+                        foods={this.state.selectedFoods}
+                        listModeAdd={false}
+                        calories={this.state.totalCalories}
+                    />
+                </Row>
+            </Container>
         )
     }
 }
