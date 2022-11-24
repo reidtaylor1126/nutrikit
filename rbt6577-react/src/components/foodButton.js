@@ -4,9 +4,9 @@ import { Button } from 'reactstrap'
 function FoodButton(props) {
     return(
         <Button 
+            className='m-2'
             color='dark'
             onClick={() => props.onClick()} 
-            style={{display: props.visible ? 'block' : 'none'}}
         >
             {props.label}
         </Button>

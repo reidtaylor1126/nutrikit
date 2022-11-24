@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { Col, Container, Input } from 'reactstrap';
+import { Col, Container, Input, Row } from 'reactstrap';
 
 class Categories extends React.Component {
     constructor(props) {
@@ -15,7 +15,9 @@ class Categories extends React.Component {
                 className={this.props.className}
                 sm={2}
             >
-                <h3>Categories</h3>
+                <h3>
+                    Categories
+                </h3>
                 <Input 
                     type="select" 
                     name="food-list" 

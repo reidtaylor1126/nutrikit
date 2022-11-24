@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import {Col, Container, Input} from 'reactstrap'
+import {Col, Container, Input, Row} from 'reactstrap'
 
 class FoodList extends React.Component {
     constructor(props) {
@@ -14,6 +14,7 @@ class FoodList extends React.Component {
         return(
             <Col 
                 className={this.props.className}
+                sm={this.props.sm}
             >
                 <h3>{this.props.title}</h3>
                 <Input 

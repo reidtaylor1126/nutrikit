@@ -40,3 +40,9 @@ select {
 .section-title-space {
     height: 45pt;
 }
+
+.center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
