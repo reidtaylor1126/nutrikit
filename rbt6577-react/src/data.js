@@ -1,4 +1,10 @@
 export const categories = ["Proteins", "Fruits", "Vegetables", "Dairy", "Grains"];
+export const dailyValue = {
+    "totalFat": 78,
+    "saturatedFat": 20,
+    "protein": 50,
+    "carbohydrate": 275
+}
 export const menuItems = 
 {   "Proteins": [
     {
@@ -6,7 +12,7 @@ export const menuItems =
         "calories": 300,
         "totalFat": 5.73,
         "saturatedFat": 2.183,
-        "transFat": 0.182,
+        "transFat": 0.182, 
         "protein": 29.44,
         "carbohydrate": 0.0
     },

@@ -1,15 +1,15 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client'
 import Categories from './categories.js';
 import FoodList from './foodList.js';
 import FoodButton from './foodButton.js';
 import SelectedFoods from './selectedFoods.js';
 
-import {categories, menuItems} from '../data.js';
+import {categories, menuItems, dailyValue} from '../data.js';
 import { Container, Row, Col, Button } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import ControlHeaders from './controlHeaders.js';
 import SettingsModal from './settingsModal.js';
+import NutritionSummary from './nutritionSummary.js';
+import NutritionLabel from './nutritionLabel.js';
 
 class Page extends React.Component {
     constructor(props) {
@@ -36,11 +36,28 @@ class Page extends React.Component {
         })
     }
 
+    sumNutrient = (nutrient) => {
+        if(this.state.selectedFoods.length === 0)
+            return 0
+        let sum = 0;
+        this.state.selectedFoods.map((food) => {
+            sum += food[nutrient];
+        })
+        console.log(sum);
+        return sum;
+    }
+
+    getScaledNutrient = (nutrient) => {
+        return dailyValue[nutrient] * this.state.maxCalories / 2000;
+    }
+
     addFood = () => {
         let food = menuItems[this.state.selectedCategory][this.state.selectedFoodIndex];
         if(food != null) {
-            this.state.selectedFoods.push(food);
+            console.log(food)
+            const oldFoods = this.state.selectedFoods;
             this.setState({
+                selectedFoods: [...oldFoods, food],
                 totalCalories: this.state.totalCalories + food.calories, 
             });
         }
@@ -69,6 +86,21 @@ class Page extends React.Component {
         this.setState({
             showSettings: !this.state.showSettings
         })
+    }
+
+    hoveredFood = () => {
+        if(this.state.selectedCategory === '' || this.state.selectedCategory === null) {
+            return ({
+                "calories": 0,
+                "totalFat": 0,
+                "saturatedFat": 0,
+                "transFat": 0,
+                "protein": 0,
+                "carbohydrate": 0
+            })
+        } else {
+            return menuItems[this.state.selectedCategory][this.state.selectedFoodIndex]
+        }
     }
 
     render() {
@@ -133,6 +165,23 @@ class Page extends React.Component {
                         calories={this.state.totalCalories}
                         maxCalories={this.state.maxCalories}
                     />
+                </Row>
+                <Row>
+                    <NutritionLabel
+                        food={this.hoveredFood()}
+                    ></NutritionLabel>
+                    <NutritionSummary
+                        calories={this.state.totalCalories}
+                        maxCalories={this.state.maxCalories}
+                        fat={this.sumNutrient('totalFat') || 0}
+                        maxFat={this.getScaledNutrient('totalFat')}
+                        satFat={this.sumNutrient('saturatedFat') || 0}
+                        maxSatFat={this.getScaledNutrient('saturatedFat')}
+                        protein={this.sumNutrient('protein') || 0}
+                        maxProtein={this.getScaledNutrient('protein')}
+                        carbs={this.sumNutrient('carbohydrate') || 0}
+                        maxCarbs={this.getScaledNutrient('carbohydrate')}
+                    ></NutritionSummary>
                 </Row>
                 <SettingsModal 
                     isOpen={this.state.showSettings}

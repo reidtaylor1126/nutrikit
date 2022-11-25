@@ -1,7 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { Col, Progress } from 'reactstrap';
-import ColorProgress from './colorProgress';
+import { Col } from 'reactstrap';
 import FoodList from './foodList';
 
 class SelectedFoods extends React.Component {
@@ -21,11 +19,6 @@ class SelectedFoods extends React.Component {
                 <p>
                     Total Calories: {this.props.calories}/{this.props.maxCalories}
                 </p>
-                <ColorProgress
-                    value={this.props.calories}
-                    max={this.props.maxCalories}
-                    margin={0.1}
-                ></ColorProgress>
             </Col>
         )
     }
