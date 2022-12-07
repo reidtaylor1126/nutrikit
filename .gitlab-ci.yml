@@ -14,4 +14,4 @@ pages:
     paths:
     - public
 variables:
-  PROJECT_NAME: client-3
+  PROJECT_NAME: client-4
