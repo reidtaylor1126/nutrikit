@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button, Card, CardBody, CardHeader, Input, Modal, ModalBody, ModalHeader } from 'reactstrap';
+import { Button, Card, CardBody, CardHeader, Input, Modal, ModalBody, ModalHeader, Row } from 'reactstrap';
+import ResettableOption from './resettableOption';
 
 class SettingsModal extends React.Component {
     constructor(props) {
@@ -14,10 +15,43 @@ class SettingsModal extends React.Component {
                 </ModalHeader>
                 <ModalBody>
                     <Card>
-                        <CardHeader>Calorie Counter</CardHeader>
+                        <CardHeader>Nutrition Goals</CardHeader>
                         <CardBody>
-                            <h4>Max Calories</h4>
-                            <Input type="number" value={this.props.maxCalories} onChange={(e) => {this.props.onChangeCalories(+e.target.value)}}></Input>
+                            <ResettableOption 
+                                label={'Calories'}
+                                value={this.props.calories}
+                                optionKey={'calories'}
+                                onChange={this.props.onChange}
+                                onReset={this.props.onReset}
+                            />
+                            <ResettableOption 
+                                label={'Total Fat'}
+                                value={this.props.totalfat}
+                                optionKey={'totalfat'}
+                                onChange={this.props.onChange}
+                                onReset={this.props.onReset}
+                            />
+                            <ResettableOption 
+                                label={'Saturated Fat'}
+                                value={this.props.satfat}
+                                optionKey={'saturatedfat'}
+                                onChange={this.props.onChange}
+                                onReset={this.props.onReset}
+                            />
+                            <ResettableOption 
+                                label={'Protein'}
+                                value={this.props.protein}
+                                optionKey={'protein'}
+                                onChange={this.props.onChange}
+                                onReset={this.props.onReset}
+                            />
+                            <ResettableOption 
+                                label={'Carbs'}
+                                value={this.props.carbohydrate}
+                                optionKey={'carbohydrate'}
+                                onChange={this.props.onChange}
+                                onReset={this.props.onReset}
+                            />
                         </CardBody>
                     </Card>
                 </ModalBody>

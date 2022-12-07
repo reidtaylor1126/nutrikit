@@ -11,15 +11,15 @@ class NutritionLabel extends React.Component {
                 </Row>
                 <Row>
                     <Col xs="10"><h5>Total Fat</h5></Col>
-                    <Col xs="2"><p>{this.props.food.totalFat} mg</p></Col>
+                    <Col xs="2"><p>{this.props.food.totalfat} mg</p></Col>
                 </Row>
                 <Row>
                     <Col xs="10"><h5>Saturated Fat</h5></Col>
-                    <Col xs="2"><p>{this.props.food.saturatedFat} mg</p></Col>
+                    <Col xs="2"><p>{this.props.food.saturatedfat} mg</p></Col>
                 </Row>
                 <Row>
                     <Col xs="10"><h5>Trans Fat</h5></Col>
-                    <Col xs="2"><p>{this.props.food.transFat} mg</p></Col>
+                    <Col xs="2"><p>{this.props.food.transfat} mg</p></Col>
                 </Row>
                 <Row>
                     <Col xs="10"><h5>Protein</h5></Col>

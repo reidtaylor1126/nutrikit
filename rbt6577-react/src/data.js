@@ -1,9 +1,18 @@
+export const api_address = 'http://127.0.0.1:5000/api/'
+
 export const categories = ["Proteins", "Fruits", "Vegetables", "Dairy", "Grains"];
 export const dailyValue = {
     "totalFat": 78,
     "saturatedFat": 20,
     "protein": 50,
     "carbohydrate": 275
+}
+export const defaultGoals = {
+    'calories': 2000,
+    'totalfat': 78,
+    'saturatedfat': 20,
+    'protein': 50,
+    'carbohydrate': 275,
 }
 export const menuItems = 
 {   "Proteins": [

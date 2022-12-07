@@ -4,30 +4,185 @@ import FoodList from './foodList.js';
 import FoodButton from './foodButton.js';
 import SelectedFoods from './selectedFoods.js';
 
-import {categories, menuItems, dailyValue} from '../data.js';
+import {categories, menuItems, dailyValue, defaultGoals, api_address} from '../data.js';
 import { Container, Row, Col, Button } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import SettingsModal from './settingsModal.js';
 import NutritionSummary from './nutritionSummary.js';
 import NutritionLabel from './nutritionLabel.js';
+import FoodMenu from './foodMenu.js';
+import FoodModal from './foodModal.js'
 
 class Page extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            connected: true,
+            categories: [],
             selectedCategory: '',
             selectedFoodIndex: -1,
             selectedFoods: [],
             maxCalories: 2000,
             totalCalories: 0,
             listModeAdd: true,
-            showSettings: false
+            showSettings: false,
+            nutritionGoals: JSON.parse(JSON.stringify(defaultGoals)),
+            foodDataTemp: {
+                'id': -1,
+                'name': '',
+                'category': 'Proteins',
+                'calories': 0,
+                'totalfat': 0,
+                'saturatedfat': 0,
+                'transfat': 0,
+                'protein': 0,
+                'carbohydrate': 0
+            },
+            showFoodEdit: false,
+            foodEditMode: '',
+            foodEditAction: this.addFood,
+            foodEditMessage: ''
         }
+    }
+
+    componentDidMount = () => {
+        fetch(`${api_address}categories`, {
+            method: 'get', 
+        }).then(
+            (res) => {
+                if(res.ok) {
+                    res.json().then((data) => {
+                        this.setState({categories: data})
+                    })
+                } else {
+                    this.state.connected = false
+                }
+            }
+        )
     }
 
     selectCategory = (category) => {
         console.log(category);
-        this.setState({selectedCategory: category, selectedFoodIndex: 0});
+        fetch(`${api_address}foods/${category}`, {
+            method: 'get',
+        }).then(
+            (res) => {
+                res.json().then((data) => {
+                    this.setState({selectedCategory: category, foodMenu: data, selectedFoodIndex: 0});
+                })
+            }
+        )
+    }
+
+    setNutritionGoal = (nutrient, value) => {
+        console.log(`Setting ${nutrient} goal to ${value}`)
+        let goalsCopy = JSON.parse(JSON.stringify(this.state.nutritionGoals));
+        goalsCopy[nutrient] = value;
+        this.setState({nutritionGoals: goalsCopy});
+    }
+
+    resetNutritionGoal = (nutrient) => {
+        const value = defaultGoals[nutrient]
+        this.setNutritionGoal(nutrient, value)
+    }
+
+    openNewFood = () => {
+        console.log('opening food creation modal')
+        this.setState({
+            showFoodEdit: true,
+            foodEditMode: 'New',
+            foodEditAction: this.newFood,
+            foodEditMessage: ''
+        })
+    }
+
+    newFood = () => {
+        const data = this.state.foodDataTemp;
+        //this.state.foodMenu.push(data);
+        this.setState();
+        fetch(`${api_address}foods`, {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then((res) => {
+            if(res.ok) {
+                this.successCloseFoodEditor()
+            } else {
+                this.foodEditorFailure()
+            }
+        })
+    }
+
+    openEditFood = () => {
+        console.log('opening food edit modal')
+        this.setState({
+            foodEditMode: 'Edit',
+            foodEditAction: this.editFood,
+            showFoodEdit: true,
+            foodEditMessage: ''
+        })
+    }
+
+    editFood = () => {
+        const data = this.state.foodDataTemp;
+        this.state.foodMenu[this.state.selectedFoodIndex] = data;
+        this.setState();
+
+        fetch(`${api_address}foods?id=${data.id}`, {
+            method: 'put',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then((res) => {
+            if(res.ok) {
+                this.successCloseFoodEditor()
+            } else {
+                this.foodEditorFailure()
+            }
+        })
+    }
+
+    successCloseFoodEditor = () => {
+        this.setState({
+            foodDataTemp: {
+                'id': -1,
+                'name': '',
+                'category': 'Proteins',
+                'calories': 0,
+                'totalfat': 0,
+                'saturatedfat': 0,
+                'transfat': 0,
+                'protein': 0,
+                'carbohydrate': 0
+            },
+            foodEditMessage: 'Updated foods'
+        })
+        setTimeout(() => {this.setState({showFoodEdit: false})}, 500)
+    }
+
+    foodEditorFailure = () => {
+        this.setState({foodEditMessage: 'Failed to update foods'});
+    }
+
+    toggleFoodEditor = () => {
+        this.setState({
+            showFoodEdit: !this.state.showFoodEdit
+        })
+    }
+
+    deleteFood = () => {
+        if(this.state.selectedFoodIndex >= 0) {
+            const food = this.state.foodMenu[this.state.selectedFoodIndex];
+            console.log(food);
+            fetch(`${api_address}foods?id=${food.id}`, {
+                method: 'delete'
+            })
+            this.state.foodMenu.splice(this.state.selectedFoodIndex, 1);
+            this.setState({selectedFoodIndex: 0});
+        }
     }
 
     changeMaxCalories = (maxCalories) => {
@@ -43,7 +198,6 @@ class Page extends React.Component {
         this.state.selectedFoods.map((food) => {
             sum += food[nutrient];
         })
-        console.log(sum);
         return sum;
     }
 
@@ -52,7 +206,7 @@ class Page extends React.Component {
     }
 
     addFood = () => {
-        let food = menuItems[this.state.selectedCategory][this.state.selectedFoodIndex];
+        let food = this.state.foodMenu[this.state.selectedFoodIndex];
         if(food != null) {
             console.log(food)
             const oldFoods = this.state.selectedFoods;
@@ -61,6 +215,15 @@ class Page extends React.Component {
                 totalCalories: this.state.totalCalories + food.calories, 
             });
         }
+    }
+
+    modifyTempFood = (key, value) => {
+        console.log(key)
+        console.log(value)
+        let foodDataCopy = JSON.parse(JSON.stringify(this.state.foodDataTemp)) // create deep copy
+        console.log(foodDataCopy[key])
+        foodDataCopy[key] = value;
+        this.setState({foodDataTemp: foodDataCopy});
     }
 
     removeFood = () => {
@@ -75,10 +238,11 @@ class Page extends React.Component {
     }
 
     selectFood = (index, listModeAdd) => {
-        console.log("selected index ", index)
+        console.log(this.state.foodMenu[index])
         this.setState({
             selectedFoodIndex: index,
-            listModeAdd: listModeAdd
+            listModeAdd: listModeAdd,
+            foodDataTemp: this.state.foodMenu[index]
         })
     }
 
@@ -91,15 +255,19 @@ class Page extends React.Component {
     hoveredFood = () => {
         if(this.state.selectedCategory === '' || this.state.selectedCategory === null) {
             return ({
+                "id": -1,
+                "name": "No Food Selected",
                 "calories": 0,
-                "totalFat": 0,
-                "saturatedFat": 0,
-                "transFat": 0,
+                "totalfat": 0,
+                "saturatedfat": 0,
+                "transfat": 0,
                 "protein": 0,
                 "carbohydrate": 0
             })
         } else {
-            return menuItems[this.state.selectedCategory][this.state.selectedFoodIndex]
+            const data = this.state.foodMenu[this.state.selectedFoodIndex];
+            console.log(data);
+            return data;
         }
     }
 
@@ -124,17 +292,20 @@ class Page extends React.Component {
                 <Row className="controls">
                     <Categories 
                         className='control-section px-4 py-2'
-                        categories={categories} 
+                        categories={this.state.categories} 
                         onSelect={this.selectCategory} 
                         category={this.state.selectedCategory}
                     />
-                    <FoodList 
+                    <FoodMenu 
                         sm={4}
                         title={this.state.selectedCategory + " Menu"}
                         className='control-section px-4 py-2'
                         onSelect={this.selectFood}
-                        foods={menuItems[this.state.selectedCategory] || []}
+                        foods={this.state.foodMenu || []}
                         listModeAdd={true}
+                        onClickNew={this.openNewFood}
+                        onClickEdit={this.openEditFood}
+                        onClickDel={this.deleteFood}
                     />
                     <Col 
                         className='control-section px-4 py-2'
@@ -172,23 +343,46 @@ class Page extends React.Component {
                     ></NutritionLabel>
                     <NutritionSummary
                         calories={this.state.totalCalories}
-                        maxCalories={this.state.maxCalories}
-                        fat={this.sumNutrient('totalFat') || 0}
-                        maxFat={this.getScaledNutrient('totalFat')}
-                        satFat={this.sumNutrient('saturatedFat') || 0}
-                        maxSatFat={this.getScaledNutrient('saturatedFat')}
+                        maxCalories={this.state.nutritionGoals['calories']}
+                        fat={this.sumNutrient('totalfat') || 0}
+                        maxFat={this.state.nutritionGoals['totalfat']}
+                        satFat={this.sumNutrient('saturatedfat') || 0}
+                        maxSatFat={this.state.nutritionGoals['saturatedfat']}
                         protein={this.sumNutrient('protein') || 0}
-                        maxProtein={this.getScaledNutrient('protein')}
+                        maxProtein={this.state.nutritionGoals['protein']}
                         carbs={this.sumNutrient('carbohydrate') || 0}
-                        maxCarbs={this.getScaledNutrient('carbohydrate')}
+                        maxCarbs={this.state.nutritionGoals['carbohydrate']}
                     ></NutritionSummary>
                 </Row>
                 <SettingsModal 
                     isOpen={this.state.showSettings}
                     toggle={this.toggleSettings}
-                    maxCalories={this.state.maxCalories}
-                    onChangeCalories={this.changeMaxCalories}
-                ></SettingsModal>
+                    onChange={this.setNutritionGoal}
+                    onReset ={this.resetNutritionGoal}
+                    calories={this.state.nutritionGoals['calories']}
+                    totalfat={this.state.nutritionGoals['totalfat']}
+                    satfat={this.state.nutritionGoals['saturatedfat']}
+                    protein={this.state.nutritionGoals['protein']}
+                    carbohydrate={this.state.nutritionGoals['carbohydrate']}
+                />
+                <FoodModal 
+                    isOpen={this.state.showFoodEdit}
+                    toggle={this.toggleFoodEditor}
+                    modeLabel={this.state.foodEditMode}
+                    categories={this.state.categories}
+                    foodId={this.state.foodDataTemp.id}
+                    foodName={this.state.foodDataTemp.name}
+                    category={this.state.foodDataTemp.category}
+                    calories={this.state.foodDataTemp.calories}
+                    totalFat={this.state.foodDataTemp.totalfat}
+                    saturatedFat={this.state.foodDataTemp.saturatedfat}
+                    transFat={this.state.foodDataTemp.transfat}
+                    protein={this.state.foodDataTemp.protein}
+                    carbs={this.state.foodDataTemp.carbohydrate}
+                    onConfirm={this.state.foodEditAction}
+                    modify={this.modifyTempFood}
+                    message={this.state.foodEditMessage}
+                />
             </Container>
         )
     }

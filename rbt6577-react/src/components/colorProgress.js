@@ -12,8 +12,6 @@ class ColorProgress extends React.Component {
             barColor = 'danger'
         }
 
-        console.log(barColor)
-
         return(
             <Progress 
                 max={this.props.max}
